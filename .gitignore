@@ -1,0 +1,14 @@
+tools/
+downloads/
+
+YouTubeMp3Backup.exe
+errors.txt
+app-error.log
+links.txt
+download-archive.txt
+
+*.mp3
+*.m4a
+*.webm
+*.part
+*.tmp
