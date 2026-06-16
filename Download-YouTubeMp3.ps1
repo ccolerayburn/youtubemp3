@@ -102,11 +102,17 @@ foreach ($CurrentUrl in $Urls) {
         $Arguments = @("--no-playlist") + $Arguments
     }
 
-    & $YtDlp @Arguments
+    $PreviousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    & $YtDlp @Arguments 2>&1 | ForEach-Object {
+        Write-Host $_.ToString()
+    }
+    $YtDlpExitCode = $LASTEXITCODE
+    $ErrorActionPreference = $PreviousErrorActionPreference
 
-    if ($LASTEXITCODE -ne 0) {
+    if ($YtDlpExitCode -ne 0) {
         $Failed++
-        Write-Host "Failed with exit code $LASTEXITCODE."
+        Write-Host "Failed with exit code $YtDlpExitCode."
     }
 
     Write-Host ""
