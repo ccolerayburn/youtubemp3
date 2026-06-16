@@ -269,6 +269,27 @@ $singleBox.Checked = $true
 $form.Controls.Add($singleBox)
 $toolTip.SetToolTip($singleBox, "For watch links, downloads only that video even if the URL includes a playlist or radio list.")
 
+$cookiesBox = New-Object System.Windows.Forms.CheckBox
+$cookiesBox.Text = "Use browser cookies"
+$cookiesBox.Location = New-Object System.Drawing.Point(320, 212)
+$cookiesBox.Size = New-Object System.Drawing.Size(150, 24)
+$form.Controls.Add($cookiesBox)
+$toolTip.SetToolTip($cookiesBox, "Use cookies from a local browser where you are signed into YouTube. Do not export or paste cookies.")
+
+$browserBox = New-Object System.Windows.Forms.ComboBox
+$browserBox.Location = New-Object System.Drawing.Point(480, 211)
+$browserBox.Size = New-Object System.Drawing.Size(130, 24)
+$browserBox.DropDownStyle = "DropDownList"
+[void]$browserBox.Items.Add("edge")
+[void]$browserBox.Items.Add("chrome")
+[void]$browserBox.Items.Add("firefox")
+[void]$browserBox.Items.Add("brave")
+[void]$browserBox.Items.Add("vivaldi")
+$browserBox.SelectedItem = "edge"
+$browserBox.Enabled = $false
+$form.Controls.Add($browserBox)
+$toolTip.SetToolTip($browserBox, "Choose the browser that is signed into YouTube.")
+
 $setupButton = New-Object System.Windows.Forms.Button
 $setupButton.Text = "Install tools"
 $setupButton.Location = New-Object System.Drawing.Point(16, 252)
@@ -356,6 +377,10 @@ $browseButton.Add_Click({
     }
 })
 
+$cookiesBox.Add_CheckedChanged({
+    $browserBox.Enabled = $cookiesBox.Checked
+})
+
 $setupButton.Add_Click({
     Append-Log "Running setup..."
 
@@ -402,6 +427,11 @@ $downloadButton.Add_Click({
             UrlFile = $script:CurrentUrlFile
             OutputFolder = $outputBox.Text
         }
+
+        if ($cookiesBox.Checked) {
+            $downloadParams.CookieBrowser = [string]$browserBox.SelectedItem
+        }
+
         $downloadSwitches = @()
 
         if ($archiveBox.Checked) {

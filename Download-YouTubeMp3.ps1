@@ -6,6 +6,8 @@ param(
 
     [string]$OutputFolder = "C:\_Media\MP3",
 
+    [string]$CookieBrowser,
+
     [switch]$Archive,
 
     [switch]$NoPlaylist,
@@ -100,6 +102,10 @@ foreach ($CurrentUrl in $Urls) {
 
     if ($NoPlaylist) {
         $Arguments = @("--no-playlist") + $Arguments
+    }
+
+    if ($CookieBrowser) {
+        $Arguments = @("--cookies-from-browser", $CookieBrowser) + $Arguments
     }
 
     $PreviousErrorActionPreference = $ErrorActionPreference

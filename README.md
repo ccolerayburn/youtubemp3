@@ -56,6 +56,12 @@ Choose a custom output folder:
 .\Download-YouTubeMp3.ps1 -Url "https://www.youtube.com/@YourChannel/videos" -OutputFolder "D:\AudioBackups"
 ```
 
+Use browser cookies for YouTube sign-in checks:
+
+```powershell
+.\Download-YouTubeMp3.ps1 -UrlFile ".\links.txt" -CookieBrowser edge
+```
+
 Archive mode writes a download archive file so reruns skip items already downloaded:
 
 ```powershell
@@ -66,6 +72,7 @@ Archive mode writes a download archive file so reruns skip items already downloa
 
 - **Archive mode** creates `download-archive.txt` in the output folder. Future runs check that file and skip videos that were already downloaded.
 - **Single video only** passes `--no-playlist` to `yt-dlp`. Keep it on for normal watch links, especially links with `list=` or `start_radio=1`. Turn it off when you intentionally want a playlist or channel backup.
+- **Use browser cookies** passes `--cookies-from-browser` to `yt-dlp`. Choose the browser where you are already signed into YouTube. Cookies are read locally and should not be pasted into chat or committed to the repo.
 
 ## EXE and Signing
 
