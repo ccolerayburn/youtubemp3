@@ -290,6 +290,15 @@ $browserBox.Enabled = $false
 $form.Controls.Add($browserBox)
 $toolTip.SetToolTip($browserBox, "Choose the browser that is signed into YouTube.")
 
+$browserProfileBox = New-Object System.Windows.Forms.TextBox
+$browserProfileBox.Location = New-Object System.Drawing.Point(620, 211)
+$browserProfileBox.Size = New-Object System.Drawing.Size(166, 24)
+$browserProfileBox.Text = "Default"
+$browserProfileBox.Enabled = $false
+$browserProfileBox.Anchor = "Top,Right"
+$form.Controls.Add($browserProfileBox)
+$toolTip.SetToolTip($browserProfileBox, "Browser profile name, such as Default or Profile 1. Leave blank to let yt-dlp choose.")
+
 $setupButton = New-Object System.Windows.Forms.Button
 $setupButton.Text = "Install tools"
 $setupButton.Location = New-Object System.Drawing.Point(16, 252)
@@ -379,6 +388,7 @@ $browseButton.Add_Click({
 
 $cookiesBox.Add_CheckedChanged({
     $browserBox.Enabled = $cookiesBox.Checked
+    $browserProfileBox.Enabled = $cookiesBox.Checked
 })
 
 $setupButton.Add_Click({
@@ -429,7 +439,12 @@ $downloadButton.Add_Click({
         }
 
         if ($cookiesBox.Checked) {
-            $downloadParams.CookieBrowser = [string]$browserBox.SelectedItem
+            $cookieBrowser = [string]$browserBox.SelectedItem
+            $cookieProfile = $browserProfileBox.Text.Trim()
+            if ($cookieProfile) {
+                $cookieBrowser = "$($cookieBrowser):$cookieProfile"
+            }
+            $downloadParams.CookieBrowser = $cookieBrowser
         }
 
         $downloadSwitches = @()
